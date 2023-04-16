@@ -1,2 +1,2 @@
 # mmagdyeg.github.io
-based on this repo https://github.com/semarketir/quranjson.git
+card css ui based on ChatGPT
