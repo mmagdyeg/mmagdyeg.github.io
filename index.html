@@ -81,7 +81,7 @@
                     <div class="col-md-4"> .NET </div>
                     <div class="col-md-8">
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 0%;" data-percent="85" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
                   </div>                  
@@ -91,7 +91,7 @@
                     <div class="col-md-4"> C# </div>
                     <div class="col-md-8">
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 78%;" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 0%;" data-percent="78"  aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
                   </div> 
@@ -101,7 +101,7 @@
                     <div class="col-md-4"> JavaScript </div>
                     <div class="col-md-8">
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 89%;" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 0%;" data-percent="89"  aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
                   </div> 
@@ -111,7 +111,7 @@
                     <div class="col-md-4"> SQL Server </div>
                     <div class="col-md-8">
                       <div class="progress">
-                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 71%;" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-gradient-success" role="progressbar" style="width: 0%;" data-percent="71"  aria-valuenow="93" aria-valuemin="0" aria-valuemax="100"></div>
                       </div>
                     </div>
                   </div> 
@@ -131,9 +131,46 @@
  
 </div>
 
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+  jQuery(function($) {
+    var _oldShow = $.fn.show;
+    $.fn.show = function(speed, oldCallback) {
+      return $(this).each(function() {
+        var obj         = $(this),
+            newCallback = function() {
+              if ($.isFunction(oldCallback)) {
+                oldCallback.apply(obj);
+              }
+              obj.trigger('afterShow');
+            };
+        // you can trigger a before show if you want
+        obj.trigger('beforeShow');
+        // now use the old function to show the element passing the new callback
+        _oldShow.apply(obj, [speed, newCallback]);
+      });
+    }
+  });
+  jQuery(function($) {
+  $('#skills')
+    .bind('beforeShow', function() {
+      console.log('beforeShow');      
+    }) 
+    .bind('afterShow', function() {
+      console.log('afterShow');
+    })
+    .show(1000, function() {
+      $('div.progress-bar').each(function(index,elem) {      
+        var percent = $(elem).data("percent");      
+        $(elem).animate({ width: `${percent}%` });
+      });
+    });
+   });
+
+</script>
 </body>
 </html>
